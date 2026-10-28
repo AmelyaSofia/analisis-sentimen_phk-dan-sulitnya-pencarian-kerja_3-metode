@@ -177,82 +177,97 @@
     <!-- Main Container -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-8 w-full">
 
-        <!-- Stats Overview Cards (5 Cards) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4.5">
+        <!-- Stats Overview Cards (6 Cards in 1 Row) -->
+        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-3.5">
             
-            <!-- Positif -->
-            <div class="bg-white/95 p-5 rounded-3xl border border-softBlue-200 shadow-sm shadow-softBlue-100/50 hover:shadow-md transition group">
+            <!-- 1. Positif -->
+            <div class="bg-white/95 p-4 rounded-2xl border border-softBlue-200 shadow-xs hover:shadow-md transition group">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-slate-700">Sentimen Positif</span>
-                    <span class="w-9 h-9 rounded-2xl bg-softBlue-100 text-softBlue-700 flex items-center justify-center text-sm group-hover:scale-105 transition">
+                    <span class="text-xs font-bold text-slate-700 truncate pr-1">Sentimen Positif</span>
+                    <span class="w-7 h-7 rounded-xl bg-softBlue-100 text-softBlue-700 flex items-center justify-center text-xs shrink-0 group-hover:scale-105 transition">
                         <i class="fa-solid fa-face-smile"></i>
                     </span>
                 </div>
-                <div class="mt-3 flex items-baseline justify-between">
-                    <div class="text-2xl sm:text-3xl font-black text-slate-900">{{ pos_count }}</div>
-                    <div class="text-xs font-bold text-softBlue-800 bg-softBlue-100 border border-softBlue-300 px-3 py-1 rounded-full">{{ pos_pct }}%</div>
+                <div class="mt-2.5 flex items-baseline justify-between gap-1.5">
+                    <div class="text-xl sm:text-2xl font-black text-slate-900">{{ pos_count }}</div>
+                    <div class="text-[10px] font-bold text-softBlue-800 bg-softBlue-100 border border-softBlue-300 px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">{{ pos_pct }}%</div>
                 </div>
-                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed">Harapan & motivasi usaha</p>
+                <p class="text-[11px] text-slate-500 mt-1.5 font-medium leading-tight truncate">Harapan & motivasi</p>
             </div>
 
-            <!-- Negatif -->
-            <div class="bg-white/95 p-5 rounded-3xl border border-softPink-200 shadow-sm shadow-softPink-100/50 hover:shadow-md transition group">
+            <!-- 2. Negatif -->
+            <div class="bg-white/95 p-4 rounded-2xl border border-softPink-200 shadow-xs hover:shadow-md transition group">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-slate-700">Sentimen Negatif</span>
-                    <span class="w-9 h-9 rounded-2xl bg-softPink-100 text-softPink-700 flex items-center justify-center text-sm group-hover:scale-105 transition">
+                    <span class="text-xs font-bold text-slate-700 truncate pr-1">Sentimen Negatif</span>
+                    <span class="w-7 h-7 rounded-xl bg-softPink-100 text-softPink-700 flex items-center justify-center text-xs shrink-0 group-hover:scale-105 transition">
                         <i class="fa-solid fa-face-frown"></i>
                     </span>
                 </div>
-                <div class="mt-3 flex items-baseline justify-between">
-                    <div class="text-2xl sm:text-3xl font-black text-slate-900">{{ neg_count }}</div>
-                    <div class="text-xs font-bold text-softPink-800 bg-softPink-100 border border-softPink-300 px-3 py-1 rounded-full">{{ neg_pct }}%</div>
+                <div class="mt-2.5 flex items-baseline justify-between gap-1.5">
+                    <div class="text-xl sm:text-2xl font-black text-slate-900">{{ neg_count }}</div>
+                    <div class="text-[10px] font-bold text-softPink-800 bg-softPink-100 border border-softPink-300 px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">{{ neg_pct }}%</div>
                 </div>
-                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed">Keluhan PHK & loker sulit</p>
+                <p class="text-[11px] text-slate-500 mt-1.5 font-medium leading-tight truncate">Keluhan PHK & loker</p>
             </div>
 
-            <!-- Netral -->
-            <div class="bg-white/95 p-5 rounded-3xl border border-softYellow-200 shadow-sm shadow-softYellow-100/50 hover:shadow-md transition group">
+            <!-- 3. Netral -->
+            <div class="bg-white/95 p-4 rounded-2xl border border-softYellow-200 shadow-xs hover:shadow-md transition group">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-slate-700">Sentimen Netral</span>
-                    <span class="w-9 h-9 rounded-2xl bg-softYellow-100 text-softYellow-800 flex items-center justify-center text-sm group-hover:scale-105 transition">
+                    <span class="text-xs font-bold text-slate-700 truncate pr-1">Sentimen Netral</span>
+                    <span class="w-7 h-7 rounded-xl bg-softYellow-100 text-softYellow-800 flex items-center justify-center text-xs shrink-0 group-hover:scale-105 transition">
                         <i class="fa-solid fa-face-meh"></i>
                     </span>
                 </div>
-                <div class="mt-3 flex items-baseline justify-between">
-                    <div class="text-2xl sm:text-3xl font-black text-slate-900">{{ net_count }}</div>
-                    <div class="text-xs font-bold text-softYellow-900 bg-softYellow-100 border border-softYellow-300 px-3 py-1 rounded-full">{{ net_pct }}%</div>
+                <div class="mt-2.5 flex items-baseline justify-between gap-1.5">
+                    <div class="text-xl sm:text-2xl font-black text-slate-900">{{ net_count }}</div>
+                    <div class="text-[10px] font-bold text-softYellow-900 bg-softYellow-100 border border-softYellow-300 px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">{{ net_pct }}%</div>
                 </div>
-                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed">Fakta objektif & sapaan</p>
+                <p class="text-[11px] text-slate-500 mt-1.5 font-medium leading-tight truncate">Fakta & pertanyaan</p>
             </div>
 
-            <!-- Akurasi SVM -->
-            <div class="bg-white/95 p-5 rounded-3xl border border-softBlue-200 shadow-sm shadow-softBlue-100/50 hover:shadow-md transition group">
+            <!-- 4. Akurasi InSet -->
+            <div class="bg-white/95 p-4 rounded-2xl border border-softYellow-200 shadow-xs hover:shadow-md transition group">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-slate-700">Akurasi SVM</span>
-                    <span class="w-9 h-9 rounded-2xl bg-softBlue-100 text-softBlue-700 flex items-center justify-center text-sm group-hover:scale-105 transition">
+                    <span class="text-xs font-bold text-slate-700 truncate pr-1">Akurasi InSet</span>
+                    <span class="w-7 h-7 rounded-xl bg-softYellow-100 text-softYellow-800 flex items-center justify-center text-xs shrink-0 group-hover:scale-105 transition">
+                        <i class="fa-solid fa-book-open"></i>
+                    </span>
+                </div>
+                <div class="mt-2.5 flex items-baseline justify-between gap-1.5">
+                    <div class="text-xl sm:text-2xl font-black text-softYellow-800 tracking-tight">{{ inset_acc }}%</div>
+                    <div class="text-[10px] font-bold text-softYellow-900 bg-softYellow-100 border border-softYellow-300 px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">Metode 1</div>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-1.5 font-medium leading-tight truncate">Rule-based Lexicon</p>
+            </div>
+
+            <!-- 5. Akurasi SVM -->
+            <div class="bg-white/95 p-4 rounded-2xl border border-softBlue-200 shadow-xs hover:shadow-md transition group">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-700 truncate pr-1">Akurasi SVM</span>
+                    <span class="w-7 h-7 rounded-xl bg-softBlue-100 text-softBlue-700 flex items-center justify-center text-xs shrink-0 group-hover:scale-105 transition">
                         <i class="fa-solid fa-bullseye"></i>
                     </span>
                 </div>
-                <div class="mt-3 flex items-baseline justify-between">
-                    <div class="text-2xl sm:text-3xl font-black text-softBlue-700">{{ svm_acc }}%</div>
-                    <div class="text-xs font-bold text-softBlue-800 bg-softBlue-100 border border-softBlue-300 px-3 py-1 rounded-full">Metode 2</div>
+                <div class="mt-2.5 flex items-baseline justify-between gap-1.5">
+                    <div class="text-xl sm:text-2xl font-black text-softBlue-700 tracking-tight">{{ svm_acc }}%</div>
+                    <div class="text-[10px] font-bold text-softBlue-800 bg-softBlue-100 border border-softBlue-300 px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">Metode 2</div>
                 </div>
-                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed">Linear Margin (Tertinggi)</p>
+                <p class="text-[11px] text-slate-500 mt-1.5 font-medium leading-tight truncate">Linear Margin (Top)</p>
             </div>
 
-            <!-- Akurasi Cosine -->
-            <div class="bg-white/95 p-5 rounded-3xl border border-softPink-200 shadow-sm shadow-softPink-100/50 hover:shadow-md transition group">
+            <!-- 6. Akurasi Cosine -->
+            <div class="bg-white/95 p-4 rounded-2xl border border-softPink-200 shadow-xs hover:shadow-md transition group">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-slate-700">Akurasi Cosine</span>
-                    <span class="w-9 h-9 rounded-2xl bg-softPink-100 text-softPink-700 flex items-center justify-center text-sm group-hover:scale-105 transition">
+                    <span class="text-xs font-bold text-slate-700 truncate pr-1">Akurasi Cosine</span>
+                    <span class="w-7 h-7 rounded-xl bg-softPink-100 text-softPink-700 flex items-center justify-center text-xs shrink-0 group-hover:scale-105 transition">
                         <i class="fa-solid fa-compass"></i>
                     </span>
                 </div>
-                <div class="mt-3 flex items-baseline justify-between">
-                    <div class="text-2xl sm:text-3xl font-black text-softPink-700">{{ cos_acc }}%</div>
-                    <div class="text-xs font-bold text-softPink-800 bg-softPink-100 border border-softPink-300 px-3 py-1 rounded-full">Metode 3</div>
+                <div class="mt-2.5 flex items-baseline justify-between gap-1.5">
+                    <div class="text-xl sm:text-2xl font-black text-softPink-700 tracking-tight">{{ cos_acc }}%</div>
+                    <div class="text-[10px] font-bold text-softPink-800 bg-softPink-100 border border-softPink-300 px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">Metode 3</div>
                 </div>
-                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed">Vector Space Centroid</p>
+                <p class="text-[11px] text-slate-500 mt-1.5 font-medium leading-tight truncate">Vector Centroid</p>
             </div>
 
         </div>
@@ -362,34 +377,99 @@
                             </h3>
                             <p class="text-xs text-slate-500 font-medium mt-0.5">Kamus Sentimen Bahasa Indonesia</p>
                         </div>
-                        <span class="text-xs bg-softYellow-100 text-softYellow-900 px-3.5 py-1 rounded-full font-bold border border-softYellow-300">Rule-based</span>
+                        <span class="text-xs bg-softYellow-100 text-softYellow-900 px-3.5 py-1 rounded-full font-bold border border-softYellow-300">Akurasi: {{ inset_acc }}%</span>
                     </div>
 
-                    <div class="py-6 flex flex-col items-center">
-                        <div class="w-48 h-48">
-                            <canvas id="sentimentChart"></canvas>
+                    <!-- Confusion Matrix Table InSet -->
+                    <div class="mt-4">
+                        <div class="text-xs font-bold text-slate-800 mb-2.5 flex items-center justify-between">
+                            <span>Confusion Matrix InSet</span>
+                            <span class="text-[11px] text-slate-500 font-semibold">Evaluasi: 296 Sampel</span>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-center text-xs border border-slate-200 rounded-2xl overflow-hidden font-medium">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-700 font-bold text-[11px]">
+                                        <th class="px-3 py-2.5 border border-slate-200">Aktual \ Pred</th>
+                                        <th class="px-3 py-2.5 border border-slate-200 text-rose-700 bg-rose-50/30">Neg</th>
+                                        <th class="px-3 py-2.5 border border-slate-200 text-slate-700 bg-slate-50/50">Net</th>
+                                        <th class="px-3 py-2.5 border border-slate-200 text-sky-700 bg-sky-50/30">Pos</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="px-3 py-2 font-bold bg-slate-50 border border-slate-200 text-rose-700">Negatif</td>
+                                        <td class="px-3 py-2 bg-softPink-100 font-black text-softPink-900 border border-slate-200">{{ inset_cm[0][0] }}</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ inset_cm[0][1] }}</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ inset_cm[0][2] }}</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="px-3 py-2 font-bold bg-slate-50 border border-slate-200 text-slate-700">Netral</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ inset_cm[1][0] }}</td>
+                                        <td class="px-3 py-2 bg-softYellow-100 font-black text-softYellow-900 border border-slate-200">{{ inset_cm[1][1] }}</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ inset_cm[1][2] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-3 py-2 font-bold bg-slate-50 border border-slate-200 text-sky-700">Positif</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ inset_cm[2][0] }}</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ inset_cm[2][1] }}</td>
+                                        <td class="px-3 py-2 bg-softBlue-100 font-black text-softBlue-900 border border-slate-200">{{ inset_cm[2][2] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Evaluasi Metrik Lengkap InSet -->
+                    <div class="mt-4">
+                        <div class="text-xs font-bold text-slate-800 mb-2.5 flex items-center justify-between">
+                            <span>Metrik Evaluasi per Kelas</span>
+                            <span class="text-[11px] text-slate-500 font-semibold">Precision &bull; Recall &bull; F1</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-center text-xs border border-slate-200 rounded-2xl overflow-hidden font-medium">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-700 font-bold text-[11px]">
+                                        <th class="px-3 py-2.5 border border-slate-200 text-left">Kelas</th>
+                                        <th class="px-3 py-2.5 border border-slate-200">Precision</th>
+                                        <th class="px-3 py-2.5 border border-slate-200">Recall</th>
+                                        <th class="px-3 py-2.5 border border-slate-200 font-bold text-softYellow-900 bg-softYellow-50/70">F1-Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+                                        <td class="px-3 py-2 border border-slate-200 text-left font-bold text-rose-700 bg-rose-50/40">Negatif</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ inset_metrics['Negatif']['precision'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ inset_metrics['Negatif']['recall'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-rose-800 bg-rose-100/60">{{ inset_metrics['Negatif']['f1'] }}</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+                                        <td class="px-3 py-2 border border-slate-200 text-left font-bold text-slate-700 bg-slate-100/60">Netral</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ inset_metrics['Netral']['precision'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ inset_metrics['Netral']['recall'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-slate-800 bg-slate-200/60">{{ inset_metrics['Netral']['f1'] }}</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+                                        <td class="px-3 py-2 border border-slate-200 text-left font-bold text-sky-700 bg-sky-50/40">Positif</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ inset_metrics['Positif']['precision'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ inset_metrics['Positif']['recall'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-sky-800 bg-sky-100/60">{{ inset_metrics['Positif']['f1'] }}</td>
+                                    </tr>
+                                    <tr class="bg-softYellow-50/80 font-bold text-slate-900 border-t border-slate-300">
+                                        <td class="px-3 py-2 border border-slate-200 text-left font-black text-softYellow-900">Rata-rata</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-softYellow-900">{{ inset_metrics['weighted_avg']['precision'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-softYellow-900">{{ inset_metrics['weighted_avg']['recall'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-softYellow-900 bg-softYellow-100">{{ inset_metrics['weighted_avg']['f1'] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
 
-                <div class="border-t border-slate-100 pt-4">
-                    <div class="grid grid-cols-3 gap-2.5 text-center">
-                        <div class="p-3 bg-softBlue-50/80 rounded-2xl border border-softBlue-200">
-                            <span class="block text-softBlue-800 font-black text-lg">{{ pos_count }}</span>
-                            <span class="text-slate-600 font-bold text-[11px] block mt-0.5">Positif ({{ pos_pct }}%)</span>
-                        </div>
-                        <div class="p-3 bg-softPink-50/80 rounded-2xl border border-softPink-200">
-                            <span class="block text-softPink-800 font-black text-lg">{{ neg_count }}</span>
-                            <span class="text-slate-600 font-bold text-[11px] block mt-0.5">Negatif ({{ neg_pct }}%)</span>
-                        </div>
-                        <div class="p-3 bg-softYellow-50/80 rounded-2xl border border-softYellow-200">
-                            <span class="block text-softYellow-900 font-black text-lg">{{ net_count }}</span>
-                            <span class="text-slate-600 font-bold text-[11px] block mt-0.5">Netral ({{ net_pct }}%)</span>
-                        </div>
-                    </div>
-                    <p class="text-xs text-slate-500 mt-3.5 text-center leading-relaxed font-medium">
-                        3.607 kata positif & 6.606 kata negatif dengan bobot nilai leksikon -5 hingga +5.
-                    </p>
+                <div class="border-t border-slate-100 pt-4 text-xs text-slate-500 font-medium leading-relaxed">
+                    Aturan kamus kata 3.607 kata positif & 6.606 kata negatif dengan pembalik negasi.
                 </div>
             </div>
 
@@ -882,50 +962,53 @@
 
     <!-- JavaScript for Charts & Realtime Prediction -->
     <script>
-        // 1. Chart.js Donut Visualization (Soft Kuning, Soft Biru, Soft Pink)
-        const ctx = document.getElementById('sentimentChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Positif', 'Negatif', 'Netral'],
-                datasets: [{
-                    data: [{{ pos_count }}, {{ neg_count }}, {{ net_count }}],
-                    backgroundColor: [
-                        '#7dd3fc', // Soft Biru (sky-300)
-                        '#fda4af', // Soft Pink (rose-300)
-                        '#fde047'  // Soft Kuning (yellow-300)
-                    ],
-                    borderColor: '#ffffff',
-                    borderWidth: 3,
-                    hoverOffset: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: '#1e293b',
-                        padding: 10,
-                        cornerRadius: 10,
-                        titleFont: { size: 12, family: 'Plus Jakarta Sans', weight: 'bold' },
-                        bodyFont: { size: 12, family: 'Plus Jakarta Sans' },
-                        callbacks: {
-                            label: function(context) {
-                                let total = {{ total_comments }};
-                                let val = context.parsed;
-                                let pct = total > 0 ? ((val / total) * 100).toFixed(1) : 0;
-                                return ` ${context.label}: ${val} (${pct}%)`;
+        // 1. Chart.js Donut Visualization (if element exists)
+        const chartElem = document.getElementById('sentimentChart');
+        if (chartElem) {
+            const ctx = chartElem.getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Positif', 'Negatif', 'Netral'],
+                    datasets: [{
+                        data: [{{ pos_count }}, {{ neg_count }}, {{ net_count }}],
+                        backgroundColor: [
+                            '#7dd3fc', // Soft Biru (sky-300)
+                            '#fda4af', // Soft Pink (rose-300)
+                            '#fde047'  // Soft Kuning (yellow-300)
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 3,
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            padding: 10,
+                            cornerRadius: 10,
+                            titleFont: { size: 12, family: 'Plus Jakarta Sans', weight: 'bold' },
+                            bodyFont: { size: 12, family: 'Plus Jakarta Sans' },
+                            callbacks: {
+                                label: function(context) {
+                                    let total = {{ total_comments }};
+                                    let val = context.parsed;
+                                    let pct = total > 0 ? ((val / total) * 100).toFixed(1) : 0;
+                                    return ` ${context.label}: ${val} (${pct}%)`;
+                                }
                             }
                         }
-                    }
-                },
-                cutout: '72%'
-            }
-        });
+                    },
+                    cutout: '72%'
+                }
+            });
+        }
 
         // 2. Realtime Sentiment Tester
         async function analyzeSentiment() {
