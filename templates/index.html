@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SentimenKarya.ID - Analisis Sentimen PHK & Lapangan Kerja</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        // Soft Kuning Palette
+                        softYellow: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        },
+                        // Soft Biru Palette
+                        softBlue: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                        },
+                        // Soft Pink Palette
+                        softPink: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            300: '#fda4af',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                            800: '#9f1239',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #faf9fc;
+            background-image: 
+                radial-gradient(at 8% 12%, rgba(254, 243, 199, 0.75) 0px, transparent 45%),   /* Soft Kuning */
+                radial-gradient(at 92% 8%, rgba(224, 242, 254, 0.8) 0px, transparent 48%),    /* Soft Biru */
+                radial-gradient(at 50% 50%, rgba(255, 241, 242, 0.6) 0px, transparent 55%),   /* Soft Pink */
+                radial-gradient(at 12% 88%, rgba(254, 205, 211, 0.6) 0px, transparent 48%),   /* Soft Pink */
+                radial-gradient(at 88% 90%, rgba(254, 243, 199, 0.7) 0px, transparent 45%);   /* Soft Kuning */
+            background-attachment: fixed;
+        }
+
+        /* Custom scrollbar halus */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(241, 245, 249, 0.6);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="text-slate-700 antialiased min-h-screen flex flex-col justify-between selection:bg-softPink-100 selection:text-softPink-800">
+
+    <!-- Top Navigation Bar -->
+    <nav class="bg-white/85 backdrop-blur-md border-b border-pink-100/80 sticky top-0 z-50 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between py-3">
+            <div class="flex items-center space-x-3.5">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-softYellow-300 via-softPink-300 to-softBlue-300 p-0.5 shadow-sm shadow-pink-200/50">
+                    <div class="w-full h-full bg-white rounded-[14px] flex items-center justify-center text-slate-800 font-bold">
+                        <i class="fa-solid fa-chart-pie text-lg text-transparent bg-clip-text bg-gradient-to-tr from-amber-500 via-rose-500 to-sky-500"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-slate-900 text-lg sm:text-xl leading-tight tracking-tight flex items-center gap-1.5">
+                        SentimenKarya<span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-sky-600">.ID</span>
+                    </h1>
+                    <p class="text-xs text-slate-500 font-medium leading-normal">Dashboard Komparasi Opini Publik PHK & Lapangan Kerja</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <span class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-softYellow-50 via-softPink-50 to-softBlue-50 text-slate-800 border border-pink-200/90 shadow-2xs">
+                    <span class="w-2.5 h-2.5 mr-2 bg-emerald-400 rounded-full animate-ping"></span> 3 Metode Komparatif Aktif
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero / Title Section -->
+    <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4 w-full">
+        <div class="bg-white/90 backdrop-blur-md rounded-3xl p-7 sm:p-9 border border-pink-100/90 shadow-sm relative overflow-hidden">
+            <!-- Subtle colorful background blur blobs -->
+            <div class="absolute -top-12 -right-12 w-56 h-56 bg-softBlue-100 rounded-full blur-3xl opacity-70 pointer-events-none"></div>
+            <div class="absolute -bottom-14 -left-14 w-56 h-56 bg-softYellow-100 rounded-full blur-3xl opacity-70 pointer-events-none"></div>
+            <div class="absolute top-1/2 left-1/3 w-40 h-40 bg-softPink-100 rounded-full blur-2xl opacity-50 pointer-events-none"></div>
+
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div class="max-w-3xl space-y-3.5">
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <!-- Soft Biru Pill -->
+                        <span class="px-3.5 py-1.5 bg-softBlue-50 text-softBlue-800 text-xs font-bold rounded-full border border-softBlue-200 shadow-2xs">
+                            <i class="fa-brands fa-youtube mr-1.5 text-rose-500"></i> YouTube Scraping 3 Video
+                        </span>
+                        <!-- Soft Pink Pill -->
+                        <span class="px-3.5 py-1.5 bg-softPink-50 text-softPink-800 text-xs font-bold rounded-full border border-softPink-200 shadow-2xs">
+                            <i class="fa-solid fa-layer-group mr-1.5 text-rose-500"></i> 3 Metode Komparatif
+                        </span>
+                        <!-- Soft Kuning Pill -->
+                        <span class="px-3.5 py-1.5 bg-softYellow-50 text-softYellow-900 text-xs font-bold rounded-full border border-softYellow-200 shadow-2xs">
+                            <i class="fa-solid fa-sparkles mr-1.5 text-amber-500"></i> Ground Truth Acuan
+                        </span>
+                    </div>
+
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
+                        Analisis Sentimen Fenomena PHK & Lapangan Kerja di Indonesia
+                    </h2>
+                    
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed font-medium">
+                        Eksplorasi komparasi sentimen publik pada data komentar YouTube menggunakan 3 metode: 
+                        <strong class="text-slate-900 font-bold">InSet Lexicon</strong>, 
+                        <strong class="text-slate-900 font-bold">Support Vector Machine (SVM)</strong>, dan 
+                        <strong class="text-slate-900 font-bold">TF-IDF Cosine Similarity</strong> terhadap 
+                        <strong class="text-amber-800 bg-amber-50 px-2 py-0.5 rounded-lg border border-amber-200 font-bold">Ground Truth Acuan</strong>.
+                    </p>
+                </div>
+
+                <!-- Total Count Box -->
+                <div class="flex flex-col sm:flex-row lg:flex-col gap-3 self-start lg:self-center shrink-0">
+                    <div class="bg-gradient-to-br from-softBlue-50 via-softYellow-50 to-softPink-50 p-5 rounded-2xl border border-pink-200/80 shadow-xs">
+                        <div class="text-xs font-bold uppercase tracking-wider text-slate-600">Total Komentar Valid</div>
+                        <div class="text-2xl sm:text-3xl font-black text-slate-900 mt-1.5 flex items-center">
+                            <span class="text-softBlue-600 mr-2.5"><i class="fa-solid fa-comments"></i></span> 
+                            {{ total_comments }} 
+                            <span class="text-xs font-semibold text-slate-500 ml-2">Sampel Bersih</span>
+                        </div>
+                        <div class="text-xs text-emerald-700 font-bold mt-2 flex items-center">
+                            <i class="fa-solid fa-circle-check mr-1.5 text-emerald-500"></i> Lolos text preprocessing & cleaning
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-8 w-full">
+
+        <!-- Stats Overview Cards (5 Cards) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4.5">
+            
+            <!-- Positif -->
+            <div class="bg-white/95 p-5 rounded-3xl border border-softBlue-200 shadow-sm shadow-softBlue-100/50 hover:shadow-md transition group">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-700">Sentimen Positif</span>
+                    <span class="w-9 h-9 rounded-2xl bg-softBlue-100 text-softBlue-700 flex items-center justify-center text-sm group-hover:scale-105 transition">
+                        <i class="fa-solid fa-face-smile"></i>
+                    </span>
+                </div>
+                <div class="mt-3 flex items-baseline justify-between">
+                    <div class="text-2xl sm:text-3xl font-black text-slate-900">{{ pos_count }}</div>
+                    <div class="text-xs font-bold text-softBlue-800 bg-softBlue-100 border border-softBlue-300 px-3 py-1 rounded-full">{{ pos_pct }}%</div>
+                </div>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed">Harapan & motivasi usaha</p>
+            </div>
+
+            <!-- Negatif -->
+            <div class="bg-white/95 p-5 rounded-3xl border border-softPink-200 shadow-sm shadow-softPink-100/50 hover:shadow-md transition group">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-700">Sentimen Negatif</span>
+                    <span class="w-9 h-9 rounded-2xl bg-softPink-100 text-softPink-700 flex items-center justify-center text-sm group-hover:scale-105 transition">
+                        <i class="fa-solid fa-face-frown"></i>
+                    </span>
+                </div>
+                <div class="mt-3 flex items-baseline justify-between">
+                    <div class="text-2xl sm:text-3xl font-black text-slate-900">{{ neg_count }}</div>
+                    <div class="text-xs font-bold text-softPink-800 bg-softPink-100 border border-softPink-300 px-3 py-1 rounded-full">{{ neg_pct }}%</div>
+                </div>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed">Keluhan PHK & loker sulit</p>
+            </div>
+
+            <!-- Netral -->
+            <div class="bg-white/95 p-5 rounded-3xl border border-softYellow-200 shadow-sm shadow-softYellow-100/50 hover:shadow-md transition group">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-700">Sentimen Netral</span>
+                    <span class="w-9 h-9 rounded-2xl bg-softYellow-100 text-softYellow-800 flex items-center justify-center text-sm group-hover:scale-105 transition">
+                        <i class="fa-solid fa-face-meh"></i>
+                    </span>
+                </div>
+                <div class="mt-3 flex items-baseline justify-between">
+                    <div class="text-2xl sm:text-3xl font-black text-slate-900">{{ net_count }}</div>
+                    <div class="text-xs font-bold text-softYellow-900 bg-softYellow-100 border border-softYellow-300 px-3 py-1 rounded-full">{{ net_pct }}%</div>
+                </div>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed">Fakta objektif & sapaan</p>
+            </div>
+
+            <!-- Akurasi SVM -->
+            <div class="bg-white/95 p-5 rounded-3xl border border-softBlue-200 shadow-sm shadow-softBlue-100/50 hover:shadow-md transition group">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-700">Akurasi SVM</span>
+                    <span class="w-9 h-9 rounded-2xl bg-softBlue-100 text-softBlue-700 flex items-center justify-center text-sm group-hover:scale-105 transition">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </span>
+                </div>
+                <div class="mt-3 flex items-baseline justify-between">
+                    <div class="text-2xl sm:text-3xl font-black text-softBlue-700">{{ svm_acc }}%</div>
+                    <div class="text-xs font-bold text-softBlue-800 bg-softBlue-100 border border-softBlue-300 px-3 py-1 rounded-full">Metode 2</div>
+                </div>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed">Linear Margin (Tertinggi)</p>
+            </div>
+
+            <!-- Akurasi Cosine -->
+            <div class="bg-white/95 p-5 rounded-3xl border border-softPink-200 shadow-sm shadow-softPink-100/50 hover:shadow-md transition group">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-700">Akurasi Cosine</span>
+                    <span class="w-9 h-9 rounded-2xl bg-softPink-100 text-softPink-700 flex items-center justify-center text-sm group-hover:scale-105 transition">
+                        <i class="fa-solid fa-compass"></i>
+                    </span>
+                </div>
+                <div class="mt-3 flex items-baseline justify-between">
+                    <div class="text-2xl sm:text-3xl font-black text-softPink-700">{{ cos_acc }}%</div>
+                    <div class="text-xs font-bold text-softPink-800 bg-softPink-100 border border-softPink-300 px-3 py-1 rounded-full">Metode 3</div>
+                </div>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed">Vector Space Centroid</p>
+            </div>
+
+        </div>
+
+        <!-- Section: Interactive Live Sentiment Tester -->
+        <section class="bg-white/95 rounded-3xl p-6 sm:p-8 border border-softBlue-100 shadow-sm shadow-softBlue-100/30 relative overflow-hidden">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-slate-100 mb-6 gap-3">
+                <div class="flex items-center space-x-3.5">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-softYellow-200 via-softPink-200 to-softBlue-200 flex items-center justify-center text-base text-slate-800 font-bold shadow-xs">
+                        <i class="fa-solid fa-wand-magic-sparkles text-rose-500"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-slate-900 text-base sm:text-lg">Uji Coba Langsung (Live Sentiment Tester)</h3>
+                        <p class="text-xs text-slate-500 font-medium">Uji teks baru dan bandingkan respon Metode 1, Metode 2, dan Metode 3 secara real-time.</p>
+                    </div>
+                </div>
+                <span class="text-xs bg-softYellow-50 text-softYellow-900 px-3.5 py-1 rounded-full font-bold border border-softYellow-200 self-start sm:self-center">
+                    Real-time Evaluator
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Input Box -->
+                <div class="lg:col-span-6 space-y-4">
+                    <label class="block text-sm font-bold text-slate-800">Tulis Komentar Uji:</label>
+                    <textarea id="inputComment" rows="4" 
+                        class="w-full rounded-2xl border border-slate-200 p-4 text-sm font-medium text-slate-800 bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-4 focus:ring-softBlue-100 focus:border-softBlue-400 transition leading-relaxed placeholder-slate-400"
+                        placeholder="Ketik komentar di sini, contoh: Sedih banget teman-teman pabrik banyak yang kena PHK, padahal cari loker sekarang susah..."></textarea>
+                    
+                    <div>
+                        <button id="btnPredict" onclick="analyzeSentiment()" 
+                            class="w-full sm:w-auto px-7 py-3 bg-gradient-to-r from-softBlue-600 via-indigo-600 to-softPink-600 hover:opacity-95 text-white text-sm font-extrabold rounded-2xl shadow-sm shadow-pink-200 transition flex items-center justify-center space-x-2.5">
+                            <i class="fa-solid fa-paper-plane text-xs"></i>
+                            <span>Analisis Komparasi 3 Metode</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Output Card -->
+                <div class="lg:col-span-6 bg-slate-50/80 border border-slate-200/90 rounded-2xl p-6 flex flex-col justify-between" id="resultContainer">
+                    <div id="resultPlaceholder" class="h-full flex flex-col items-center justify-center text-center py-8">
+                        <div class="w-14 h-14 bg-white rounded-2xl shadow-xs border border-pink-100 flex items-center justify-center text-rose-500 mb-3">
+                            <i class="fa-solid fa-sparkles text-2xl text-transparent bg-clip-text bg-gradient-to-tr from-amber-500 via-rose-500 to-sky-500"></i>
+                        </div>
+                        <div class="text-sm font-extrabold text-slate-800">Belum Ada Analisis yang Dijalankan</div>
+                        <p class="text-xs text-slate-500 mt-1.5 max-w-xs font-medium leading-relaxed">Tuliskan komentar pada kolom sebelah kiri, lalu klik tombol Analisis Komparasi 3 Metode.</p>
+                    </div>
+
+                    <div id="resultContent" class="hidden space-y-4">
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs">
+                            <div class="text-[11px] uppercase font-bold text-slate-500 tracking-wider">Hasil Preprocessing (Teks Bersih)</div>
+                            <div id="resCleanText" class="text-xs font-mono text-slate-800 mt-1.5 leading-relaxed"></div>
+                        </div>
+
+                        <!-- 3 Badges Side-by-Side -->
+                        <div class="grid grid-cols-3 gap-3">
+                            <!-- InSet -->
+                            <div class="bg-white p-3.5 rounded-2xl border border-softYellow-200 shadow-2xs text-center">
+                                <div class="text-[11px] font-bold text-softYellow-900 uppercase">1. InSet</div>
+                                <div id="resInSetLabel" class="text-sm font-black mt-1"></div>
+                                <div id="resInSetScore" class="text-xs font-semibold text-slate-500 mt-1"></div>
+                            </div>
+                            <!-- SVM -->
+                            <div class="bg-white p-3.5 rounded-2xl border border-softBlue-200 shadow-2xs text-center">
+                                <div class="text-[11px] font-bold text-softBlue-800 uppercase">2. SVM</div>
+                                <div id="resSVMLabel" class="text-sm font-black mt-1"></div>
+                                <div class="text-xs font-semibold text-slate-500 mt-1">Linear Margin</div>
+                            </div>
+                            <!-- Cosine -->
+                            <div class="bg-white p-3.5 rounded-2xl border border-softPink-200 shadow-2xs text-center">
+                                <div class="text-[11px] font-bold text-softPink-800 uppercase">3. Cosine</div>
+                                <div id="resCosLabel" class="text-sm font-black mt-1"></div>
+                                <div id="resCosScore" class="text-xs font-semibold text-slate-500 mt-1"></div>
+                            </div>
+                        </div>
+
+                        <!-- Cosine Scores Breakdown -->
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 text-xs">
+                            <div class="text-xs font-bold text-slate-800 mb-2">Derajat Kemiripan Sudut Cosine (0 s.d 1):</div>
+                            <div class="grid grid-cols-3 gap-2 text-xs font-semibold">
+                                <span class="text-softBlue-800 bg-softBlue-50/80 p-2 rounded-xl border border-softBlue-200 text-center">Positif: <b id="cosScorePos">-</b></span>
+                                <span class="text-softPink-800 bg-softPink-50/80 p-2 rounded-xl border border-softPink-200 text-center">Negatif: <b id="cosScoreNeg">-</b></span>
+                                <span class="text-softYellow-900 bg-softYellow-50/80 p-2 rounded-xl border border-softYellow-200 text-center">Netral: <b id="cosScoreNet">-</b></span>
+                            </div>
+                        </div>
+
+                        <div class="text-xs bg-white p-4 rounded-2xl border border-slate-200 space-y-2 font-medium">
+                            <div><span class="font-bold text-emerald-700">Kata Positif (InSet):</span> <span id="resPosWords" class="text-slate-800 font-semibold">-</span></div>
+                            <div><span class="font-bold text-rose-700">Kata Negatif (InSet):</span> <span id="resNegWords" class="text-slate-800 font-semibold">-</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Detail 3 Metode -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- Metode 1: InSet Lexicon (Soft Kuning Theme) -->
+            <div class="bg-white/95 p-6 sm:p-7 rounded-3xl border border-softYellow-200 shadow-sm shadow-softYellow-100/40 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base flex items-center">
+                                <span class="w-6 h-6 rounded-lg bg-softYellow-100 text-softYellow-800 text-xs flex items-center justify-center font-black mr-2">1</span>
+                                InSet Lexicon
+                            </h3>
+                            <p class="text-xs text-slate-500 font-medium mt-0.5">Kamus Sentimen Bahasa Indonesia</p>
+                        </div>
+                        <span class="text-xs bg-softYellow-100 text-softYellow-900 px-3.5 py-1 rounded-full font-bold border border-softYellow-300">Rule-based</span>
+                    </div>
+
+                    <div class="py-6 flex flex-col items-center">
+                        <div class="w-48 h-48">
+                            <canvas id="sentimentChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-4">
+                    <div class="grid grid-cols-3 gap-2.5 text-center">
+                        <div class="p-3 bg-softBlue-50/80 rounded-2xl border border-softBlue-200">
+                            <span class="block text-softBlue-800 font-black text-lg">{{ pos_count }}</span>
+                            <span class="text-slate-600 font-bold text-[11px] block mt-0.5">Positif ({{ pos_pct }}%)</span>
+                        </div>
+                        <div class="p-3 bg-softPink-50/80 rounded-2xl border border-softPink-200">
+                            <span class="block text-softPink-800 font-black text-lg">{{ neg_count }}</span>
+                            <span class="text-slate-600 font-bold text-[11px] block mt-0.5">Negatif ({{ neg_pct }}%)</span>
+                        </div>
+                        <div class="p-3 bg-softYellow-50/80 rounded-2xl border border-softYellow-200">
+                            <span class="block text-softYellow-900 font-black text-lg">{{ net_count }}</span>
+                            <span class="text-slate-600 font-bold text-[11px] block mt-0.5">Netral ({{ net_pct }}%)</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-3.5 text-center leading-relaxed font-medium">
+                        3.607 kata positif & 6.606 kata negatif dengan bobot nilai leksikon -5 hingga +5.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Metode 2: Support Vector Machine (Soft Biru Theme) -->
+            <div class="bg-white/95 p-6 sm:p-7 rounded-3xl border border-softBlue-200 shadow-sm shadow-softBlue-100/40 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base flex items-center">
+                                <span class="w-6 h-6 rounded-lg bg-softBlue-100 text-softBlue-700 text-xs flex items-center justify-center font-black mr-2">2</span>
+                                SVM (Linear)
+                            </h3>
+                            <p class="text-xs text-slate-500 font-medium mt-0.5">Supervised Machine Learning</p>
+                        </div>
+                        <span class="text-xs bg-softBlue-100 text-softBlue-800 px-3.5 py-1 rounded-full font-bold border border-softBlue-300">Akurasi: {{ svm_acc }}%</span>
+                    </div>
+
+                    <!-- Confusion Matrix Table -->
+                    <div class="mt-4">
+                        <div class="text-xs font-bold text-slate-800 mb-2.5 flex items-center justify-between">
+                            <span>Confusion Matrix SVM</span>
+                            <span class="text-[11px] text-slate-500 font-semibold">Data Uji: 60 Sampel</span>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-center text-xs border border-slate-200 rounded-2xl overflow-hidden font-medium">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-700 font-bold text-[11px]">
+                                        <th class="px-3 py-2.5 border border-slate-200">Aktual \ Pred</th>
+                                        <th class="px-3 py-2.5 border border-slate-200 text-rose-700 bg-rose-50/30">Neg</th>
+                                        <th class="px-3 py-2.5 border border-slate-200 text-slate-700 bg-slate-50/50">Net</th>
+                                        <th class="px-3 py-2.5 border border-slate-200 text-sky-700 bg-sky-50/30">Pos</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="px-3 py-2 font-bold bg-slate-50 border border-slate-200 text-rose-700">Negatif</td>
+                                        <td class="px-3 py-2 bg-softPink-100 font-black text-softPink-900 border border-slate-200">{{ svm_cm[0][0] }}</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ svm_cm[0][1] }}</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ svm_cm[0][2] }}</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="px-3 py-2 font-bold bg-slate-50 border border-slate-200 text-slate-700">Netral</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ svm_cm[1][0] }}</td>
+                                        <td class="px-3 py-2 bg-softYellow-100 font-black text-softYellow-900 border border-slate-200">{{ svm_cm[1][1] }}</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ svm_cm[1][2] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-3 py-2 font-bold bg-slate-50 border border-slate-200 text-sky-700">Positif</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ svm_cm[2][0] }}</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ svm_cm[2][1] }}</td>
+                                        <td class="px-3 py-2 bg-softBlue-100 font-black text-softBlue-900 border border-slate-200">{{ svm_cm[2][2] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Evaluasi Metrik Lengkap -->
+                    <div class="mt-4">
+                        <div class="text-xs font-bold text-slate-800 mb-2.5 flex items-center justify-between">
+                            <span>Metrik Evaluasi per Kelas</span>
+                            <span class="text-[11px] text-slate-500 font-semibold">Precision &bull; Recall &bull; F1</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-center text-xs border border-slate-200 rounded-2xl overflow-hidden font-medium">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-700 font-bold text-[11px]">
+                                        <th class="px-3 py-2.5 border border-slate-200 text-left">Kelas</th>
+                                        <th class="px-3 py-2.5 border border-slate-200">Precision</th>
+                                        <th class="px-3 py-2.5 border border-slate-200">Recall</th>
+                                        <th class="px-3 py-2.5 border border-slate-200 font-bold text-softBlue-800 bg-softBlue-50/70">F1-Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+                                        <td class="px-3 py-2 border border-slate-200 text-left font-bold text-rose-700 bg-rose-50/40">Negatif</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ svm_metrics['Negatif']['precision'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ svm_metrics['Negatif']['recall'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-rose-800 bg-rose-100/60">{{ svm_metrics['Negatif']['f1'] }}</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+                                        <td class="px-3 py-2 border border-slate-200 text-left font-bold text-slate-700 bg-slate-100/60">Netral</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ svm_metrics['Netral']['precision'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ svm_metrics['Netral']['recall'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-slate-800 bg-slate-200/60">{{ svm_metrics['Netral']['f1'] }}</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+                                        <td class="px-3 py-2 border border-slate-200 text-left font-bold text-sky-700 bg-sky-50/40">Positif</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ svm_metrics['Positif']['precision'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ svm_metrics['Positif']['recall'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-sky-800 bg-sky-100/60">{{ svm_metrics['Positif']['f1'] }}</td>
+                                    </tr>
+                                    <tr class="bg-softBlue-50/80 font-bold text-slate-900 border-t border-slate-300">
+                                        <td class="px-3 py-2 border border-slate-200 text-left font-black text-softBlue-900">Rata-rata</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-softBlue-900">{{ svm_metrics['weighted_avg']['precision'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-softBlue-900">{{ svm_metrics['weighted_avg']['recall'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-softBlue-900 bg-softBlue-100">{{ svm_metrics['weighted_avg']['f1'] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-4 text-xs text-slate-500 font-medium leading-relaxed">
+                    Fitur kata TF-IDF Unigram + Bigram dengan pemisahan hyperplane berjarak maksimal.
+                </div>
+            </div>
+
+            <!-- Metode 3: TF-IDF + Cosine Similarity (Soft Pink Theme) -->
+            <div class="bg-white/95 p-6 sm:p-7 rounded-3xl border border-softPink-200 shadow-sm shadow-softPink-100/40 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base flex items-center">
+                                <span class="w-6 h-6 rounded-lg bg-softPink-100 text-softPink-700 text-xs flex items-center justify-center font-black mr-2">3</span>
+                                Cosine Similarity
+                            </h3>
+                            <p class="text-xs text-slate-500 font-medium mt-0.5">Vector Space Centroid Model</p>
+                        </div>
+                        <span class="text-xs bg-softPink-100 text-softPink-800 px-3.5 py-1 rounded-full font-bold border border-softPink-300">Akurasi: {{ cos_acc }}%</span>
+                    </div>
+
+                    <!-- Confusion Matrix Table Cosine -->
+                    <div class="mt-4">
+                        <div class="text-xs font-bold text-slate-800 mb-2.5 flex items-center justify-between">
+                            <span>Confusion Matrix Cosine</span>
+                            <span class="text-[11px] text-slate-500 font-semibold">Data Uji: 60 Sampel</span>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-center text-xs border border-slate-200 rounded-2xl overflow-hidden font-medium">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-700 font-bold text-[11px]">
+                                        <th class="px-3 py-2.5 border border-slate-200">Aktual \ Pred</th>
+                                        <th class="px-3 py-2.5 border border-slate-200 text-rose-700 bg-rose-50/30">Neg</th>
+                                        <th class="px-3 py-2.5 border border-slate-200 text-slate-700 bg-slate-50/50">Net</th>
+                                        <th class="px-3 py-2.5 border border-slate-200 text-sky-700 bg-sky-50/30">Pos</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="px-3 py-2 font-bold bg-slate-50 border border-slate-200 text-rose-700">Negatif</td>
+                                        <td class="px-3 py-2 bg-softPink-100 font-black text-softPink-900 border border-slate-200">{{ cos_cm[0][0] }}</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ cos_cm[0][1] }}</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ cos_cm[0][2] }}</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="px-3 py-2 font-bold bg-slate-50 border border-slate-200 text-slate-700">Netral</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ cos_cm[1][0] }}</td>
+                                        <td class="px-3 py-2 bg-softYellow-100 font-black text-softYellow-900 border border-slate-200">{{ cos_cm[1][1] }}</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ cos_cm[1][2] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-3 py-2 font-bold bg-slate-50 border border-slate-200 text-sky-700">Positif</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ cos_cm[2][0] }}</td>
+                                        <td class="px-3 py-2 bg-white border border-slate-200 text-slate-600">{{ cos_cm[2][1] }}</td>
+                                        <td class="px-3 py-2 bg-softBlue-100 font-black text-softBlue-900 border border-slate-200">{{ cos_cm[2][2] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Evaluasi Metrik Cosine -->
+                    <div class="mt-4">
+                        <div class="text-xs font-bold text-slate-800 mb-2.5 flex items-center justify-between">
+                            <span>Metrik Evaluasi per Kelas</span>
+                            <span class="text-[11px] text-slate-500 font-semibold">Precision &bull; Recall &bull; F1</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-center text-xs border border-slate-200 rounded-2xl overflow-hidden font-medium">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-700 font-bold text-[11px]">
+                                        <th class="px-3 py-2.5 border border-slate-200 text-left">Kelas</th>
+                                        <th class="px-3 py-2.5 border border-slate-200">Precision</th>
+                                        <th class="px-3 py-2.5 border border-slate-200">Recall</th>
+                                        <th class="px-3 py-2.5 border border-slate-200 font-bold text-softPink-800 bg-softPink-50/70">F1-Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+                                        <td class="px-3 py-2 border border-slate-200 text-left font-bold text-rose-700 bg-rose-50/40">Negatif</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ cos_metrics['Negatif']['precision'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ cos_metrics['Negatif']['recall'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-rose-800 bg-rose-100/60">{{ cos_metrics['Negatif']['f1'] }}</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+                                        <td class="px-3 py-2 border border-slate-200 text-left font-bold text-slate-700 bg-slate-100/60">Netral</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ cos_metrics['Netral']['precision'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ cos_metrics['Netral']['recall'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-slate-800 bg-slate-200/60">{{ cos_metrics['Netral']['f1'] }}</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+                                        <td class="px-3 py-2 border border-slate-200 text-left font-bold text-sky-700 bg-sky-50/40">Positif</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ cos_metrics['Positif']['precision'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-bold text-slate-800">{{ cos_metrics['Positif']['recall'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-sky-800 bg-sky-100/60">{{ cos_metrics['Positif']['f1'] }}</td>
+                                    </tr>
+                                    <tr class="bg-softPink-50/80 font-bold text-slate-900 border-t border-slate-300">
+                                        <td class="px-3 py-2 border border-slate-200 text-left font-black text-softPink-900">Rata-rata</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-softPink-900">{{ cos_metrics['weighted_avg']['precision'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-softPink-900">{{ cos_metrics['weighted_avg']['recall'] }}</td>
+                                        <td class="px-3 py-2 border border-slate-200 font-black text-softPink-900 bg-softPink-100">{{ cos_metrics['weighted_avg']['f1'] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-4 text-xs text-slate-500 font-medium leading-relaxed">
+                    Menghitung kedekatan sudut vektor dokumen terhadap centroid profil tiap kelas sentimen.
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Section: File Excel Akses Langsung & Unduh (Soft Harmonious Pastel Card) -->
+        <section class="bg-gradient-to-br from-softYellow-50/80 via-white to-softPink-50/80 rounded-3xl p-7 sm:p-9 shadow-sm border border-pink-200/70">
+            <div class="flex flex-col md:flex-row md:items-center justify-between pb-5 border-b border-pink-100 gap-3">
+                <div class="flex items-center space-x-3.5">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-softYellow-200 via-softPink-200 to-softBlue-200 flex items-center justify-center text-lg text-emerald-600 shadow-xs">
+                        <i class="fa-solid fa-file-excel"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-lg sm:text-xl text-slate-900 flex items-center">
+                            Akses & Unduh Berkas Excel (.xlsx)
+                        </h3>
+                        <p class="text-xs text-slate-600 mt-1 font-medium leading-normal">
+                            Buka langsung di tab browser dengan antarmuka spreadsheet interaktif atau unduh berkas resmi Microsoft Excel.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 self-start md:self-center">
+                    <span class="text-xs bg-emerald-50 text-emerald-800 px-4 py-1.5 rounded-full font-bold border border-emerald-200 flex items-center shadow-2xs">
+                        <i class="fa-solid fa-circle-check mr-1.5 text-emerald-500"></i> OpenXML Standard Ready
+                    </span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <!-- Card 1: Ground Truth Acuan (Murni) -->
+                <div class="bg-white/95 rounded-2xl p-6 border border-softYellow-200/90 shadow-xs flex flex-col justify-between hover:shadow-sm hover:border-softYellow-300 transition">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-black uppercase tracking-wider text-softYellow-900 bg-softYellow-100 px-3 py-1 rounded-full border border-softYellow-200">
+                                Ground Truth Acuan Murni
+                            </span>
+                            <span class="text-xs text-slate-500 font-mono font-bold">296 Baris</span>
+                        </div>
+                        <h4 class="font-extrabold text-slate-900 text-base mt-3 flex items-center">
+                            <i class="fa-solid fa-file-excel text-emerald-600 mr-2.5 text-base"></i> ground_truth_acuan.xlsx
+                        </h4>
+                        <p class="text-xs text-slate-600 mt-2 leading-relaxed font-normal">
+                            Memuat seluruh data 296 komentar YouTube dan teks pembersihan, lengkap dengan label sentimen <strong>Ground Truth Acuan</strong> (murni acuan standar, tanpa kolom prediksi metode).
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 mt-6 pt-4 border-t border-slate-100">
+                        <a href="/view/ground-truth-excel" target="_blank" class="flex-1 text-center text-xs font-bold bg-softBlue-50 hover:bg-softBlue-100 text-softBlue-800 px-4 py-2.5 rounded-xl transition flex items-center justify-center border border-softBlue-200 shadow-2xs">
+                            <i class="fa-solid fa-arrow-up-right-from-square mr-2 text-softBlue-600"></i> Buka di Browser
+                        </a>
+                        <a href="/download/ground-truth-excel" class="flex-1 text-center text-xs font-extrabold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-4 py-2.5 rounded-xl transition flex items-center justify-center shadow-xs">
+                            <i class="fa-solid fa-download mr-2"></i> Unduh Excel (.xlsx)
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 2: Hasil Evaluasi 3 Metode -->
+                <div class="bg-white/95 rounded-2xl p-6 border border-softPink-200/90 shadow-xs flex flex-col justify-between hover:shadow-sm hover:border-softPink-300 transition">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-black uppercase tracking-wider text-softPink-800 bg-softPink-100 px-3 py-1 rounded-full border border-softPink-200">
+                                Matriks Evaluasi Lengkap
+                            </span>
+                            <span class="text-xs text-slate-500 font-mono font-bold">3 Metode</span>
+                        </div>
+                        <h4 class="font-extrabold text-slate-900 text-base mt-3 flex items-center">
+                            <i class="fa-solid fa-file-excel text-emerald-600 mr-2.5 text-base"></i> hasil_evaluasi_3_metode.xlsx
+                        </h4>
+                        <p class="text-xs text-slate-600 mt-2 leading-relaxed font-normal">
+                            Memuat matriks performa komparatif: Precision, Recall, F1-Score per kelas (Negatif, Netral, Positif, Weighted, Macro), support pengujian, dan akurasi masing-masing metode terhadap Ground Truth Acuan.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 mt-6 pt-4 border-t border-slate-100">
+                        <a href="/view/evaluasi-metode-excel" target="_blank" class="flex-1 text-center text-xs font-bold bg-softBlue-50 hover:bg-softBlue-100 text-softBlue-800 px-4 py-2.5 rounded-xl transition flex items-center justify-center border border-softBlue-200 shadow-2xs">
+                            <i class="fa-solid fa-arrow-up-right-from-square mr-2 text-softBlue-600"></i> Buka di Browser
+                        </a>
+                        <a href="/download/evaluasi-metode-excel" class="flex-1 text-center text-xs font-extrabold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-4 py-2.5 rounded-xl transition flex items-center justify-center shadow-xs">
+                            <i class="fa-solid fa-download mr-2"></i> Unduh Excel (.xlsx)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Comparison Summary Table -->
+        <section class="bg-white/95 rounded-3xl p-6 sm:p-8 border border-softBlue-100 shadow-sm shadow-softBlue-100/20">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-slate-100 mb-5 gap-3">
+                <div>
+                    <h3 class="font-extrabold text-slate-900 flex items-center text-base sm:text-lg">
+                        <i class="fa-solid fa-scale-balanced text-softBlue-600 mr-2.5"></i> Rangkuman Perbandingan 3 Metode
+                    </h3>
+                    <p class="text-xs text-slate-500 font-medium mt-1">Perbandingan performa komparatif ketiga metode terhadap Ground Truth Acuan.</p>
+                </div>
+                <div class="flex items-center gap-2.5 self-start sm:self-center">
+                    <a href="/view/evaluasi-metode-excel" target="_blank" class="text-xs font-bold text-softBlue-800 bg-softBlue-50 hover:bg-softBlue-100 px-3.5 py-2 rounded-xl border border-softBlue-200 transition flex items-center shadow-2xs">
+                        <i class="fa-solid fa-eye mr-1.5 text-softBlue-600"></i> Buka Excel Evaluasi
+                    </a>
+                    <a href="/download/evaluasi-metode-excel" class="text-xs font-extrabold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-3.5 py-2 rounded-xl border border-emerald-200 transition flex items-center shadow-2xs">
+                        <i class="fa-solid fa-download mr-1.5 text-emerald-600"></i> Unduh Excel (.xlsx)
+                    </a>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                <table class="w-full text-left text-xs font-medium border-collapse">
+                    <thead class="bg-slate-50 text-slate-800 uppercase font-bold text-[11px] border-b border-slate-200">
+                        <tr>
+                            <th class="px-5 py-3.5 border-r border-slate-200 bg-slate-100/80">Aspek Evaluasi</th>
+                            <th class="px-5 py-3.5 border-r border-slate-200 text-softYellow-900 bg-softYellow-50/70">Metode 1: InSet Lexicon</th>
+                            <th class="px-5 py-3.5 border-r border-slate-200 text-softBlue-900 bg-softBlue-50/70">Metode 2: SVM (Linear)</th>
+                            <th class="px-5 py-3.5 text-softPink-900 bg-softPink-50/70">Metode 3: TF-IDF + Cosine Sim</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 text-slate-800 text-xs">
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-5 py-3.5 font-bold bg-slate-50 border-r border-slate-200 text-slate-800">Paradigma</td>
+                            <td class="px-5 py-3.5 border-r border-slate-200">Aturan leksikon kata (Rule-based)</td>
+                            <td class="px-5 py-3.5 border-r border-slate-200 font-semibold text-softBlue-900">Supervised Learning (Margin Maksimal)</td>
+                            <td class="px-5 py-3.5 font-semibold text-softPink-900">Vector Space Model (Sudut Kosinus Centroid)</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-5 py-3.5 font-bold bg-slate-50 border-r border-slate-200 text-slate-800">Kebutuhan Data Latih</td>
+                            <td class="px-5 py-3.5 border-r border-slate-200 text-emerald-700 font-bold">Tidak perlu pelatihan</td>
+                            <td class="px-5 py-3.5 border-r border-slate-200">Perlu data latih (80% sampel)</td>
+                            <td class="px-5 py-3.5">Perlu data latih untuk profil centroid</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-5 py-3.5 font-bold bg-slate-50 border-r border-slate-200 text-slate-800">Akurasi Pengujian</td>
+                            <td class="px-5 py-3.5 border-r border-slate-200 font-bold text-softYellow-900 bg-softYellow-50/40">{{ inset_acc }}% (Rule-based)</td>
+                            <td class="px-5 py-3.5 border-r border-slate-200 font-black text-softBlue-800 bg-softBlue-50/60">{{ svm_acc }}% (Tertinggi)</td>
+                            <td class="px-5 py-3.5 font-black text-softPink-800 bg-softPink-50/60">{{ cos_acc }}%</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-5 py-3.5 font-bold bg-slate-50 border-r border-slate-200 text-slate-800">Precision Rata-rata</td>
+                            <td class="px-5 py-3.5 border-r border-slate-200 font-bold text-slate-700">{{ inset_metrics['weighted_avg']['precision'] }}</td>
+                            <td class="px-5 py-3.5 border-r border-slate-200 font-bold text-softBlue-800">{{ svm_metrics['weighted_avg']['precision'] }} (Tertinggi)</td>
+                            <td class="px-5 py-3.5 font-bold text-softPink-800">{{ cos_metrics['weighted_avg']['precision'] }}</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-5 py-3.5 font-bold bg-slate-50 border-r border-slate-200 text-slate-800">Recall Rata-rata</td>
+                            <td class="px-5 py-3.5 border-r border-slate-200 font-bold text-slate-700">{{ inset_metrics['weighted_avg']['recall'] }}</td>
+                            <td class="px-5 py-3.5 border-r border-slate-200 font-bold text-softBlue-800">{{ svm_metrics['weighted_avg']['recall'] }} (Tertinggi)</td>
+                            <td class="px-5 py-3.5 font-bold text-softPink-800">{{ cos_metrics['weighted_avg']['recall'] }}</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-5 py-3.5 font-bold bg-slate-50 border-r border-slate-200 text-slate-800">F1-Score Rata-rata</td>
+                            <td class="px-5 py-3.5 border-r border-slate-200 font-bold text-slate-700">{{ inset_metrics['weighted_avg']['f1'] }}</td>
+                            <td class="px-5 py-3.5 border-r border-slate-200 font-black text-softBlue-800 bg-softBlue-50/60">{{ svm_metrics['weighted_avg']['f1'] }} (Tertinggi)</td>
+                            <td class="px-5 py-3.5 font-black text-softPink-800 bg-softPink-50/60">{{ cos_metrics['weighted_avg']['f1'] }}</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-5 py-3.5 font-bold bg-slate-50 border-r border-slate-200 text-slate-800">Kelebihan / Karakteristik</td>
+                            <td class="px-5 py-3.5 border-r border-slate-200 text-slate-600 leading-relaxed">Cepat tanpa latih, namun rentan pada bahasa sarkasme/satir politik (42.23% akurat).</td>
+                            <td class="px-5 py-3.5 border-r border-slate-200 text-slate-600 leading-relaxed">Akurasi dan F1-Score klasifikasi tertinggi pada ruang TF-IDF (75.00%).</td>
+                            <td class="px-5 py-3.5 text-slate-600 leading-relaxed">Menghasilkan nilai kemiripan numerik halus skala 0 s.d 1 (70.00%).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section: Data Explorer Table -->
+        <section class="bg-white/95 rounded-3xl p-6 sm:p-8 border border-softPink-100 shadow-sm shadow-softPink-100/20">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-slate-100 gap-3">
+                <div>
+                    <h3 class="font-extrabold text-slate-900 flex items-center text-base sm:text-lg">
+                        <i class="fa-solid fa-table-list text-softPink-600 mr-2.5"></i> Eksplorasi Seluruh Komentar & Komparasi 3 Metode
+                    </h3>
+                    <p class="text-xs text-slate-500 font-medium mt-1">Perbandingan prediksi Metode 1 (InSet), Metode 2 (SVM), dan Metode 3 (Cosine) terhadap Ground Truth Acuan ({{ total_comments }} komentar).</p>
+                </div>
+                
+                <div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5 w-full sm:w-auto">
+                    <div class="relative flex-1 sm:w-64">
+                        <input type="text" id="tableSearch" onkeyup="filterTable()" placeholder="Cari komentar atau sentimen..." 
+                            class="w-full text-xs font-medium rounded-xl border border-slate-200 pl-8 pr-3 py-2.5 text-slate-800 bg-slate-50/80 focus:bg-white focus:outline-none focus:ring-4 focus:ring-softPink-100 focus:border-softPink-300 transition placeholder-slate-400">
+                        <i class="fa-solid fa-search absolute left-2.5 top-3 text-slate-400 text-xs"></i>
+                    </div>
+                    <a href="/view/ground-truth-excel" target="_blank" title="Buka berkas Excel di browser" class="text-xs font-bold text-softBlue-800 bg-softBlue-50 hover:bg-softBlue-100 px-3 py-2.5 rounded-xl border border-softBlue-200 transition flex items-center shrink-0 shadow-2xs">
+                        <i class="fa-solid fa-arrow-up-right-from-square mr-1.5 text-softBlue-600"></i> Buka Excel GT
+                    </a>
+                    <a href="/download/ground-truth-excel" title="Unduh berkas Excel (.xlsx)" class="text-xs font-extrabold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-3 py-2.5 rounded-xl border border-emerald-200 transition flex items-center shrink-0 shadow-2xs">
+                        <i class="fa-solid fa-download mr-1.5 text-emerald-600"></i> Unduh Excel (.xlsx)
+                    </a>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto mt-5 max-h-[520px] rounded-2xl border border-slate-200">
+                <table class="w-full text-left text-xs text-slate-700 border-collapse" id="commentTable">
+                    <thead class="bg-slate-100/90 text-slate-800 uppercase font-bold text-[11px] sticky top-0 z-10 border-b border-slate-200 tracking-wider">
+                        <tr>
+                            <th class="px-4 py-3.5 text-center w-12 border-r border-slate-200 bg-slate-100">No</th>
+                            <th class="px-4 py-3.5 min-w-[240px] max-w-sm border-r border-slate-200 bg-slate-100">Komentar Asli</th>
+                            <th class="px-4 py-3.5 min-w-[200px] max-w-xs border-r border-slate-200 bg-slate-100">Teks Preprocessing</th>
+                            <th class="px-4 py-3.5 text-center text-softYellow-900 bg-softYellow-50 border-r border-slate-200 whitespace-nowrap">1. InSet</th>
+                            <th class="px-4 py-3.5 text-center text-softBlue-900 bg-softBlue-50 border-r border-slate-200 whitespace-nowrap">2. SVM</th>
+                            <th class="px-4 py-3.5 text-center text-softPink-900 bg-softPink-50 border-r border-slate-200 whitespace-nowrap">3. Cosine</th>
+                            <th class="px-4 py-3.5 text-center text-amber-900 bg-amber-50/80 border-l border-amber-200 whitespace-nowrap">Ground Truth Acuan</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-xs">
+                        {% for row in table_data %}
+                        <tr class="hover:bg-softBlue-50/30 transition">
+                            <td class="px-4 py-3.5 text-slate-400 font-mono font-bold text-center border-r border-slate-100">{{ loop.index }}</td>
+                            <td class="px-4 py-3.5 max-w-sm font-normal text-slate-800 border-r border-slate-100 leading-relaxed" title="{{ row.comment }}">
+                                <span class="line-clamp-2">{{ row.comment }}</span>
+                            </td>
+                            <td class="px-4 py-3.5 max-w-xs font-mono text-[11px] text-slate-600 border-r border-slate-100 leading-relaxed" title="{{ row.clean_comment }}">
+                                <span class="line-clamp-2">{{ row.clean_comment }}</span>
+                            </td>
+                            
+                            <!-- Metode 1: InSet Lexicon -->
+                            <td class="px-4 py-3.5 text-center whitespace-nowrap border-r border-slate-100">
+                                {% if row.inset_sentiment == 'Positif' %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-softBlue-50 text-softBlue-800 border border-softBlue-200 shadow-2xs">Positif</span>
+                                {% elif row.inset_sentiment == 'Negatif' %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-softPink-50 text-softPink-800 border border-softPink-200 shadow-2xs">Negatif</span>
+                                {% else %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-softYellow-50 text-softYellow-900 border border-softYellow-200 shadow-2xs">Netral</span>
+                                {% endif %}
+                                <span class="text-[10px] block font-mono text-slate-400 mt-1">Skor: {{ row.inset_score }}</span>
+                            </td>
+
+                            <!-- Metode 2: SVM -->
+                            <td class="px-4 py-3.5 text-center whitespace-nowrap border-r border-slate-100">
+                                {% if row.svm_sentiment == 'Positif' %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-softBlue-50 text-softBlue-800 border border-softBlue-200 shadow-2xs">Positif</span>
+                                {% elif row.svm_sentiment == 'Negatif' %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-softPink-50 text-softPink-800 border border-softPink-200 shadow-2xs">Negatif</span>
+                                {% else %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-softYellow-50 text-softYellow-900 border border-softYellow-200 shadow-2xs">Netral</span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Metode 3: Cosine Similarity -->
+                            <td class="px-4 py-3.5 text-center whitespace-nowrap border-r border-slate-100">
+                                {% if row.cosine_sentiment == 'Positif' %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-softBlue-50 text-softBlue-800 border border-softBlue-200 shadow-2xs">Positif</span>
+                                {% elif row.cosine_sentiment == 'Negatif' %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-softPink-50 text-softPink-800 border border-softPink-200 shadow-2xs">Negatif</span>
+                                {% else %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-softYellow-50 text-softYellow-900 border border-softYellow-200 shadow-2xs">Netral</span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Ground Truth Acuan -->
+                            <td class="px-4 py-3.5 text-center whitespace-nowrap bg-amber-50/40 border-l border-amber-200">
+                                {% if row.ground_truth == 'Positif' %}
+                                    <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-black bg-softBlue-100 text-softBlue-900 border border-softBlue-300 shadow-xs">Positif</span>
+                                {% elif row.ground_truth == 'Negatif' %}
+                                    <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-black bg-softPink-100 text-softPink-900 border border-softPink-300 shadow-xs">Negatif</span>
+                                {% else %}
+                                    <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-black bg-softYellow-100 text-softYellow-900 border border-softYellow-300 shadow-xs">Netral</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white/80 border-t border-pink-100 text-slate-500 text-xs py-6 mt-12 font-medium">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+            <div>
+                Tugas Analisis Sentimen &copy; 2026. Desain responsif pastel modern (Soft Yellow, Soft Blue, & Soft Pink).
+            </div>
+            <div class="flex items-center space-x-3 text-slate-600 font-bold">
+                <span class="text-softYellow-900">InSet Lexicon</span> &bull;
+                <span class="text-softBlue-700">SVM</span> &bull;
+                <span class="text-softPink-700">Cosine Similarity</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Charts & Realtime Prediction -->
+    <script>
+        // 1. Chart.js Donut Visualization (Soft Kuning, Soft Biru, Soft Pink)
+        const ctx = document.getElementById('sentimentChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Positif', 'Negatif', 'Netral'],
+                datasets: [{
+                    data: [{{ pos_count }}, {{ neg_count }}, {{ net_count }}],
+                    backgroundColor: [
+                        '#7dd3fc', // Soft Biru (sky-300)
+                        '#fda4af', // Soft Pink (rose-300)
+                        '#fde047'  // Soft Kuning (yellow-300)
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 3,
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#1e293b',
+                        padding: 10,
+                        cornerRadius: 10,
+                        titleFont: { size: 12, family: 'Plus Jakarta Sans', weight: 'bold' },
+                        bodyFont: { size: 12, family: 'Plus Jakarta Sans' },
+                        callbacks: {
+                            label: function(context) {
+                                let total = {{ total_comments }};
+                                let val = context.parsed;
+                                let pct = total > 0 ? ((val / total) * 100).toFixed(1) : 0;
+                                return ` ${context.label}: ${val} (${pct}%)`;
+                            }
+                        }
+                    }
+                },
+                cutout: '72%'
+            }
+        });
+
+        // 2. Realtime Sentiment Tester
+        async function analyzeSentiment() {
+            const commentInput = document.getElementById('inputComment').value.trim();
+            if (!commentInput) {
+                alert('Silakan tuliskan komentar terlebih dahulu.');
+                return;
+            }
+
+            const btn = document.getElementById('btnPredict');
+            const originalBtnHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Menganalisis...</span>';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: commentInput })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('resultPlaceholder').classList.add('hidden');
+                    document.getElementById('resultContent').classList.remove('hidden');
+
+                    // Preprocessed Text
+                    document.getElementById('resCleanText').innerText = data.clean_text || '(Teks kosong setelah cleaning)';
+
+                    // Helper badge styling
+                    function applyBadgeStyle(el, label) {
+                        el.innerText = label;
+                        if (label === 'Positif') {
+                            el.className = 'text-sm font-black mt-1 text-softBlue-800';
+                        } else if (label === 'Negatif') {
+                            el.className = 'text-sm font-black mt-1 text-softPink-800';
+                        } else {
+                            el.className = 'text-sm font-black mt-1 text-softYellow-900';
+                        }
+                    }
+
+                    // 1. InSet Result
+                    applyBadgeStyle(document.getElementById('resInSetLabel'), data.inset.label);
+                    document.getElementById('resInSetScore').innerText = `Skor: ${data.inset.score}`;
+
+                    // 2. SVM Result
+                    applyBadgeStyle(document.getElementById('resSVMLabel'), data.svm.label);
+
+                    // 3. Cosine Result
+                    applyBadgeStyle(document.getElementById('resCosLabel'), data.cosine.label);
+                    const scores = data.cosine.scores || {};
+                    const highestScore = scores[data.cosine.label] !== undefined ? scores[data.cosine.label] : '-';
+                    document.getElementById('resCosScore').innerText = `Sim: ${highestScore}`;
+
+                    // Cosine Breakdown
+                    document.getElementById('cosScorePos').innerText = scores['Positif'] !== undefined ? scores['Positif'] : '0.0';
+                    document.getElementById('cosScoreNeg').innerText = scores['Negatif'] !== undefined ? scores['Negatif'] : '0.0';
+                    document.getElementById('cosScoreNet').innerText = scores['Netral'] !== undefined ? scores['Netral'] : '0.0';
+
+                    // Matched InSet Words
+                    document.getElementById('resPosWords').innerText = data.inset.matched_pos.length > 0 ? data.inset.matched_pos.join(', ') : '-';
+                    document.getElementById('resNegWords').innerText = data.inset.matched_neg.length > 0 ? data.inset.matched_neg.join(', ') : '-';
+                } else {
+                    alert(data.error || 'Terjadi kesalahan saat analisis.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Gagal menghubungi backend Flask.');
+            } finally {
+                btn.innerHTML = originalBtnHtml;
+                btn.disabled = false;
+            }
+        }
+
+        // 3. Client-side Table Filter
+        function filterTable() {
+            const input = document.getElementById('tableSearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('commentTable');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                const rowText = tr[i].textContent || tr[i].innerText;
+                if (rowText.toLowerCase().indexOf(filter) > -1) {
+                    tr[i].style.display = '';
+                } else {
+                    tr[i].style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

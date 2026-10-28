@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Penampil Berkas Excel</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        softYellow: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        },
+                        softBlue: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                        },
+                        softPink: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            600: '#e11d48',
+                            700: '#be123c',
+                            800: '#9f1239',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #faf9fc;
+            background-image: 
+                radial-gradient(at 10% 10%, rgba(254, 243, 199, 0.7) 0px, transparent 45%),
+                radial-gradient(at 90% 10%, rgba(224, 242, 254, 0.75) 0px, transparent 45%),
+                radial-gradient(at 50% 90%, rgba(255, 241, 242, 0.6) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(241, 245, 249, 0.6); border-radius: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col justify-between selection:bg-softPink-100 selection:text-softPink-800">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-white/90 backdrop-blur-md px-4 sm:px-6 py-4 shadow-xs sticky top-0 z-20 border-b border-pink-100">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-3.5">
+            <div class="flex items-center space-x-3.5">
+                <a href="/" class="text-xs font-bold text-slate-700 hover:text-slate-900 bg-slate-100/80 hover:bg-slate-200/70 px-3.5 py-2 rounded-xl border border-slate-200 transition flex items-center shadow-2xs">
+                    <i class="fa-solid fa-arrow-left mr-2 text-slate-500"></i> Dashboard Utama
+                </a>
+                <div class="h-6 w-px bg-slate-200"></div>
+                <div class="flex items-center space-x-3">
+                    <span class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-softYellow-200 via-softPink-200 to-softBlue-200 flex items-center justify-center text-lg text-emerald-600 shadow-xs">
+                        <i class="fa-solid fa-file-excel"></i>
+                    </span>
+                    <div>
+                        <h1 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-1.5">
+                            {{ filename }}
+                        </h1>
+                        <p class="text-[11px] text-slate-500 font-medium leading-normal">
+                            {{ file_type }} &bull; Total: <strong class="text-slate-800 font-bold">{{ total_rows }}</strong> entri data
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <div class="relative flex-1 sm:w-64">
+                    <input type="text" id="excelSearch" onkeyup="filterExcelTable()" placeholder="Cari data dalam spreadsheet..." 
+                        class="w-full text-xs font-medium rounded-xl border border-slate-200 pl-8 pr-3.5 py-2.5 text-slate-800 bg-slate-50/80 focus:bg-white focus:outline-none focus:ring-4 focus:ring-softBlue-100 focus:border-softBlue-400 transition placeholder-slate-400">
+                    <i class="fa-solid fa-search absolute left-2.5 top-3 text-slate-400 text-xs"></i>
+                </div>
+                <a href="{{ download_url }}" class="text-xs font-extrabold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-4 py-2.5 rounded-xl transition flex items-center shadow-xs shrink-0">
+                    <i class="fa-solid fa-download mr-2"></i> Unduh Excel (.xlsx)
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Spreadsheet Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6">
+        <div class="bg-white/95 rounded-3xl shadow-sm border border-slate-200/90 overflow-hidden">
+            
+            <div class="overflow-x-auto max-h-[calc(100vh-180px)]">
+                <table class="w-full text-left text-xs border-collapse" id="excelTable">
+                    <thead class="bg-slate-50 text-slate-800 font-bold sticky top-0 z-10 border-b border-slate-200 uppercase tracking-wider text-[11px]">
+                        <tr>
+                            {% for h in headers %}
+                            <th class="px-4 py-3.5 border-r border-slate-200 last:border-r-0 whitespace-nowrap bg-slate-100/90">
+                                {{ h }}
+                            </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-slate-700 font-medium">
+                        {% for row in rows %}
+                        <tr class="hover:bg-softBlue-50/30 transition">
+                            {% for cell in row %}
+                            <td class="px-4 py-3.5 border-r border-slate-100 last:border-r-0 leading-relaxed {% if loop.index == 1 %}font-mono font-bold text-slate-400 text-center w-12{% endif %}">
+                                {% if cell == 'Positif' %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-softBlue-50 text-softBlue-800 border border-softBlue-200 shadow-2xs">Positif</span>
+                                {% elif cell == 'Negatif' %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-softPink-50 text-softPink-800 border border-softPink-200 shadow-2xs">Negatif</span>
+                                {% elif cell == 'Netral' %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-softYellow-50 text-softYellow-900 border border-softYellow-200 shadow-2xs">Netral</span>
+                                {% else %}
+                                    {{ cell }}
+                                {% endif %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Table Footer Status -->
+            <div class="bg-slate-50/90 px-5 py-3 border-t border-slate-200 text-xs text-slate-500 flex items-center justify-between font-medium">
+                <span class="flex items-center">
+                    <i class="fa-solid fa-file-excel text-emerald-600 mr-2 text-sm"></i> Format: <strong class="text-slate-700 ml-1">Microsoft Excel OpenXML (.xlsx)</strong>
+                </span>
+                <span>Menampilkan <strong class="text-slate-800 font-bold">{{ total_rows }}</strong> baris entri</span>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        function filterExcelTable() {
+            const input = document.getElementById('excelSearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('excelTable');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                const rowText = tr[i].textContent || tr[i].innerText;
+                if (rowText.toLowerCase().indexOf(filter) > -1) {
+                    tr[i].style.display = '';
+                } else {
+                    tr[i].style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
